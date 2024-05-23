@@ -2,6 +2,10 @@
 
 A new Flutter project.
 
+A Tenant Management System
+
+Functionalities: (Add, Edit, Delete details, Sort asc = true, Search = true)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
