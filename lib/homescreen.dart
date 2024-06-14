@@ -74,16 +74,16 @@ class _HomePageState extends State<HomePage> {
         context: context,
         elevation: 5,
         isScrollControlled: true,
-        builder: (_) => Container(
-              padding: EdgeInsets.only(
-                top: 15,
-                left: 15,
-                right: 15,
-                // this will prevent the soft keyboard from covering the text fields
-                bottom: MediaQuery.of(context).viewInsets.bottom + 1,
-              ),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(10),
+        builder: (_) => SingleChildScrollView(
+              padding: const EdgeInsets.all(10),
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: 15,
+                  left: 15,
+                  right: 15,
+                  // this will prevent the soft keyboard from covering the text fields
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 1,
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                     ElevatedButton(
                       style: const ButtonStyle(
                           backgroundColor:
-                              MaterialStatePropertyAll(Colors.blueGrey)),
+                              WidgetStatePropertyAll(Colors.blueGrey)),
                       onPressed: () async {
                         if (_houseNameController.text.isEmpty) {
                           showDialog(

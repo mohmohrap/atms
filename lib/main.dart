@@ -33,48 +33,45 @@ class InitialPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.blueGrey,
         body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const Expanded(
-                  flex: 20,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'ATMS',
-                        style: TextStyle(
-                            fontSize: 100, fontWeight: FontWeight.w900),
-                      ),
-                      Text('A TENANT MANAGEMENT SYSTEM'),
-                    ],
-                  ),
+          child: Column(
+            children: [
+              const Expanded(
+                flex: 20,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'ATMS',
+                      style:
+                          TextStyle(fontSize: 100, fontWeight: FontWeight.w900),
+                    ),
+                    Text('A TENANT MANAGEMENT SYSTEM'),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                    style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(Colors.black12)),
-                    child: const Text('GO TO HOMESCREEN'),
-                    onPressed: () {
-                      bool isOpened = true;
-                      if (isOpened) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()),
-                        );
-                      }
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                flex: 1,
+                child: ElevatedButton(
+                  style: const ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.black12)),
+                  child: const Text('GO TO HOMESCREEN'),
+                  onPressed: () {
+                    bool isOpened = true;
+                    if (isOpened) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomePage()),
+                      );
+                    }
 
-                      Navigator.pushNamed(context, '/home');
-                    },
-                  ),
+                    Navigator.pushNamed(context, '/home');
+                  },
                 ),
-                const SizedBox(height: 20),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+            ],
           ),
         ),
       ),
