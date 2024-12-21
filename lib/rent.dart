@@ -155,7 +155,7 @@ class _ManagePlotsAndHousesScreenState
                 itemCount: _journals.length,
                 itemBuilder: (context, index) => Card(
                   color: Colors.blueGrey,
-                  margin: const EdgeInsets.all(15),
+                  margin: const EdgeInsets.all(10),
                   child: ListTile(
                     tileColor: Colors.white10,
                     title: Column(
@@ -174,7 +174,7 @@ class _ManagePlotsAndHousesScreenState
                         Text(
                           _journals[index]['tenantName'],
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 10),
+                              color: Colors.white, fontSize: 14),
                         ),
                       ],
                     ),
