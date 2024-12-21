@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:atms/search.dart';
 import 'package:atms/sql.dart';
-import 'manageplotsandhousesscreen.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'rent.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
         // Remove the debug banner
-        debugShowCheckedModeBanner: false,
+
         home: HomePage());
   }
 }
@@ -33,75 +32,6 @@ class _HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> _journals = [];
   //Set<int> _selectedMonths = {}; //initialize selected months as an empty set
   bool _isLoading = true;
-
-  Future<void> _makePhoneCall(String phoneNumber) async {
-    final Uri phoneUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    if (await canLaunchUrl(phoneUri)) {
-      await launchUrl(phoneUri);
-    } else {
-      throw 'Could not launch $phoneNumber';
-    }
-  }
-
-  Map<String, List<String>> plotHouseNames = {};
-  void validateAndSaveHouse(String houseName, String plotName, int? id) {
-    // If the plot name doesn't exist in the map, initialize it with an empty list
-    if (!plotHouseNames.containsKey(plotName)) {
-      plotHouseNames[plotName] = [];
-    }
-
-    // Check for a duplicate house name
-    if (plotHouseNames[plotName]!.contains(houseName)) {
-      showDuplicateHouseNameDialog();
-    } else {
-      // If no duplicate, save the house name and proceed
-      setState(() {
-        plotHouseNames[plotName]!
-            .add(houseName); // Add the new house name to the plot
-      });
-
-      // If it's a new entry, proceed with saving it to the database
-      if (id == null) {
-        _addItem();
-      } else {
-        _updateItem(
-            id); // If updating an existing entry, call the update method
-      }
-
-      // Clear text fields after saving
-      _plotNameController.clear();
-      _houseNameController.clear();
-      _tenantNameController.clear();
-      _phoneNumberController.clear();
-
-      // Close the bottom sheet/modal after saving the item
-      Navigator.of(context).pop();
-    }
-  }
-
-  void showDuplicateHouseNameDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Duplicate house name"),
-          content:
-              const Text("Please use a name not already in the current plot"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Ok"),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   // This function is used to fetch all data from the database
   void _refreshJournals() async {
@@ -121,7 +51,6 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _plotNameController = TextEditingController();
   final TextEditingController _houseNameController = TextEditingController();
   final TextEditingController _tenantNameController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
   // This function will be triggered when the floating button is pressed
   // It will also be triggered when you want to update an item
   _showForm(int? id) async {
@@ -133,7 +62,6 @@ class _HomePageState extends State<HomePage> {
       _plotNameController.text = existingJournal['plotName'];
       _houseNameController.text = existingJournal['houseName'];
       _tenantNameController.text = existingJournal['tenantName'];
-      _phoneNumberController.text = existingJournal['phoneNumber'];
       /*_selectedMonths = Set<int>.from(existingJournal['selectedMonths'] ?? []);*/
     } /*else {
       _selectedMonths = {};
@@ -147,8 +75,9 @@ class _HomePageState extends State<HomePage> {
         elevation: 5,
         isScrollControlled: true,
         builder: (_) => DraggableScrollableSheet(
+              minChildSize: 0.5,
               expand: false,
-              initialChildSize: 0.7,
+              initialChildSize: 0.5,
               maxChildSize: 0.7,
               builder: (context, scrollController) => SingleChildScrollView(
                 controller: scrollController,
@@ -245,21 +174,7 @@ class _HomePageState extends State<HomePage> {
                         maxLength: 30,
                         controller: _tenantNameController,
                         decoration: const InputDecoration(
-                          labelText: 'Tenant name',
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        maxLength: 15,
-                        controller: _phoneNumberController,
-                        keyboardType: TextInputType.phone,
-                        decoration: const InputDecoration(
-                          labelText: 'Tenant phone number',
+                          labelText: 'Tenant name and details',
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
@@ -273,8 +188,7 @@ class _HomePageState extends State<HomePage> {
                             backgroundColor:
                                 WidgetStatePropertyAll(Colors.blueGrey)),
                         onPressed: () async {
-                          if (_plotNameController.text.isEmpty ||
-                              _houseNameController.text.isEmpty) {
+                          if (_houseNameController.text.isEmpty) {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -286,9 +200,7 @@ class _HomePageState extends State<HomePage> {
                                           Radius.circular(20))),
                                   title: const Text('Not Saved'),
                                   content: const Text(
-                                    'You must enter plot & house names',
-                                    textAlign: TextAlign.center,
-                                  ),
+                                      'You must enter a house name, if none write empty'),
                                   actions: [
                                     TextButton(
                                         onPressed: () {
@@ -302,9 +214,6 @@ class _HomePageState extends State<HomePage> {
                             return; //stop execution if house name is empty
                           }
 
-                          /*validateAndSaveHouse(_houseNameController.text,
-                              _plotNameController.text, id);*/
-
                           // Save new journal
                           if (id == null) {
                             await _addItem();
@@ -313,11 +222,11 @@ class _HomePageState extends State<HomePage> {
                           if (id != null) {
                             await _updateItem(id);
                           }
+
                           // Clear the text fields
                           _plotNameController.text = '';
                           _houseNameController.text = '';
                           _tenantNameController.text = '';
-                          _phoneNumberController.text = '';
 
                           // Close the bottom sheet
                           // ignore: use_build_context_synchronously
@@ -327,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                           id == null ? 'Add New' : 'Update details',
                           style: const TextStyle(color: Colors.white),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -336,7 +245,6 @@ class _HomePageState extends State<HomePage> {
       _houseNameController.text = '';
       _tenantNameController.text = '';
       _plotNameController.text = '';
-      _phoneNumberController.text = '';
     });
   }
 
@@ -347,7 +255,6 @@ class _HomePageState extends State<HomePage> {
       _houseNameController.text,
       _tenantNameController.text,
       // _selectedMonths.toList(),
-      _phoneNumberController.text,
     );
     _refreshJournals();
   }
@@ -360,19 +267,23 @@ class _HomePageState extends State<HomePage> {
       _houseNameController.text,
       _tenantNameController.text,
       // _selectedMonths.toList(),
-      _phoneNumberController.text,
     );
     _refreshJournals();
   }
 
   // Delete an item
   void _deleteItem(int id) async {
+    final deletedItem = _journals.firstWhere((item) => item['id'] == id);
+    final plotName = deletedItem['plotName'];
+    final houseName = deletedItem['houseName'];
+
     await SQLHelper.deleteItem(id);
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('You deleted something'),
-    ));
     _refreshJournals();
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("You deleted '$houseName' from '$plotName'"),
+      duration: const Duration(seconds: 5),
+    ));
   }
 
   @override
@@ -433,17 +344,12 @@ class _HomePageState extends State<HomePage> {
                             Text(_journals[index]['houseName'],
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 16)),
-                            Text(_journals[index]['tenantName'],
-                                style: const TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    color: Colors.white,
-                                    fontSize: 15)),
                           ],
                         ),
                         const SizedBox(
                           width: 20,
                         ),
-                        Text(_journals[index]['phoneNumber'],
+                        Text(_journals[index]['tenantName'],
                             style: const TextStyle(
                                 fontStyle: FontStyle.italic,
                                 color: Colors.white,
@@ -455,15 +361,6 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          IconButton(
-                            color: Colors.green,
-                            icon: const Icon(Icons.call),
-                            onPressed: () {
-                              String phoneNumber =
-                                  _journals[index]['phoneNumber'];
-                              _makePhoneCall(phoneNumber);
-                            },
-                          ),
                           IconButton(
                             color: Colors.grey[800],
                             icon: const Icon(Icons.mode_edit_sharp),

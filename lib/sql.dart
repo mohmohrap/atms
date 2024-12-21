@@ -9,7 +9,6 @@ class SQLHelper {
         plotName TEXT,
         houseName TEXT,
         tenantName TEXT,
-        phoneNumber TEXT,
         
         createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
         
@@ -33,20 +32,14 @@ class SQLHelper {
   }
 
   // Create new item (journal)
-  static Future<int> createItem(
-    String plotName,
-    String? houseName,
-    String tenantName,
-    String phoneNumber,
-    /*, List<int> selectedMonths*/
-  ) async {
+  static Future<int> createItem(String plotName, String? houseName,
+      String tenantName /*, List<int> selectedMonths*/) async {
     final db = await SQLHelper.db();
 
     final data = {
       'plotName': plotName,
       'houseName': houseName,
       'tenantName': tenantName,
-      'phoneNumber': phoneNumber,
       /*'selectedMonths':
           selectedMonths.isNotEmpty ? selectedMonths.join(',') : '',*/
     };
@@ -83,19 +76,14 @@ class SQLHelper {
   }
 
   // Update an item by id
-  static Future<int> updateItem(
-      int id,
-      String plotName,
-      String? houseName,
-      String tenantName,
-      String phoneNumber /*, List<int> selectedMonths*/) async {
+  static Future<int> updateItem(int id, String plotName, String? houseName,
+      String tenantName /*, List<int> selectedMonths*/) async {
     final db = await SQLHelper.db();
 
     final data = {
       'plotName': plotName,
       'houseName': houseName,
       'tenantName': tenantName,
-      'phoneNumber': phoneNumber,
       /*'selectedMonths':
           selectedMonths.isNotEmpty ? selectedMonths.join(',') : '',*/
       'createdAt': DateTime.now().toString()
