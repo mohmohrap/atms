@@ -14,7 +14,7 @@ class SQLHelper {
         
       )
       """);
-    //selectedMonths TEXT,
+    //selectedMonths TEXT, phone INTEGER,
   }
 
 // id: the id of a item
@@ -32,14 +32,19 @@ class SQLHelper {
   }
 
   // Create new item (journal)
-  static Future<int> createItem(String plotName, String? houseName,
-      String tenantName /*, List<int> selectedMonths*/) async {
+  static Future<int> createItem(
+    String plotName,
+    String? houseName,
+    String tenantName,
+    /*int? phone*/ /*, List<int> selectedMonths*/
+  ) async {
     final db = await SQLHelper.db();
 
     final data = {
       'plotName': plotName,
       'houseName': houseName,
       'tenantName': tenantName,
+      //'phone': phone,
       /*'selectedMonths':
           selectedMonths.isNotEmpty ? selectedMonths.join(',') : '',*/
     };
@@ -76,14 +81,20 @@ class SQLHelper {
   }
 
   // Update an item by id
-  static Future<int> updateItem(int id, String plotName, String? houseName,
-      String tenantName /*, List<int> selectedMonths*/) async {
+  static Future<int> updateItem(
+    int id,
+    String plotName,
+    String? houseName,
+    String tenantName,
+    /*int? phone*/ /*, List<int> selectedMonths*/
+  ) async {
     final db = await SQLHelper.db();
 
     final data = {
       'plotName': plotName,
       'houseName': houseName,
       'tenantName': tenantName,
+      //'phone': phone,
       /*'selectedMonths':
           selectedMonths.isNotEmpty ? selectedMonths.join(',') : '',*/
       'createdAt': DateTime.now().toString()

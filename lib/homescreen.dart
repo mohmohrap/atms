@@ -174,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                         maxLength: 30,
                         controller: _tenantNameController,
                         decoration: const InputDecoration(
-                          labelText: 'Tenant name and details',
+                          labelText: 'Tenant name',
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
@@ -330,8 +330,10 @@ class _HomePageState extends State<HomePage> {
                 itemCount: _journals.length,
                 itemBuilder: (context, index) => Card(
                   color: Colors.blueGrey,
-                  margin: const EdgeInsets.all(15),
+                  margin: const EdgeInsets.all(12),
                   child: ListTile(
+                    shape: BeveledRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
                     tileColor: const Color.fromRGBO(255, 255, 255, 0.102),
                     title: Row(
                       children: [
@@ -344,23 +346,33 @@ class _HomePageState extends State<HomePage> {
                             Text(_journals[index]['houseName'],
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 16)),
+                            Text(_journals[index]['tenantName'],
+                                style: const TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.white,
+                                    fontSize: 14)),
                           ],
                         ),
-                        const SizedBox(
+                        /*const SizedBox(
                           width: 20,
                         ),
                         Text(_journals[index]['tenantName'],
                             style: const TextStyle(
                                 fontStyle: FontStyle.italic,
                                 color: Colors.white,
-                                fontSize: 14)),
+                                fontSize: 14)),*/
                       ],
                     ),
                     trailing: SizedBox(
-                      width: 100,
+                      width: 150,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+                          IconButton(
+                            color: Colors.grey[800],
+                            icon: const Icon(Icons.call),
+                            onPressed: null,
+                          ),
                           IconButton(
                             color: Colors.grey[800],
                             icon: const Icon(Icons.mode_edit_sharp),
