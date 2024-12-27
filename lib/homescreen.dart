@@ -51,6 +51,8 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _plotNameController = TextEditingController();
   final TextEditingController _houseNameController = TextEditingController();
   final TextEditingController _tenantNameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+
   // This function will be triggered when the floating button is pressed
   // It will also be triggered when you want to update an item
   _showForm(int? id) async {
@@ -62,22 +64,26 @@ class _HomePageState extends State<HomePage> {
       _plotNameController.text = existingJournal['plotName'];
       _houseNameController.text = existingJournal['houseName'];
       _tenantNameController.text = existingJournal['tenantName'];
+      _phoneController.text = existingJournal['phone'];
       /*_selectedMonths = Set<int>.from(existingJournal['selectedMonths'] ?? []);*/
     } /*else {
       _selectedMonths = {};
     }*/
 
     showModalBottomSheet(
+        sheetAnimationStyle: AnimationStyle(
+            reverseDuration: Duration(milliseconds: 600),
+            duration: Duration(milliseconds: 600)),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(40))),
-        backgroundColor: Colors.grey[100],
+        backgroundColor: Color.fromRGBO(255, 255, 255, 0.8),
         context: context,
         elevation: 5,
         isScrollControlled: true,
         builder: (_) => DraggableScrollableSheet(
-              minChildSize: 0.5,
+              minChildSize: 0.7,
               expand: false,
-              initialChildSize: 0.5,
+              initialChildSize: 0.7,
               maxChildSize: 0.7,
               builder: (context, scrollController) => SingleChildScrollView(
                 controller: scrollController,
@@ -117,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                             _plotNameController.text = fieldController.text;
                           });
                           return TextField(
-                            maxLength: 25,
+                            maxLength: 20,
                             controller: fieldController,
                             focusNode: focusNode,
                             decoration: const InputDecoration(
@@ -155,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                             _houseNameController.text = fieldController.text;
                           });
                           return TextField(
-                            maxLength: 25,
+                            maxLength: 15,
                             controller: fieldController,
                             focusNode: focusNode,
                             decoration: const InputDecoration(
@@ -171,10 +177,24 @@ class _HomePageState extends State<HomePage> {
                         height: 10,
                       ),
                       TextField(
-                        maxLength: 30,
+                        maxLength: 15,
                         controller: _tenantNameController,
                         decoration: const InputDecoration(
                           labelText: 'Tenant name',
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextField(
+                        maxLength: 13,
+                        controller: _phoneController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'Phone number',
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
@@ -188,7 +208,8 @@ class _HomePageState extends State<HomePage> {
                             backgroundColor:
                                 WidgetStatePropertyAll(Colors.blueGrey)),
                         onPressed: () async {
-                          if (_houseNameController.text.isEmpty) {
+                          if (_plotNameController.text.isEmpty ||
+                              _houseNameController.text.isEmpty) {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -200,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                                           Radius.circular(20))),
                                   title: const Text('Not Saved'),
                                   content: const Text(
-                                      'You must enter a house name, if none write empty'),
+                                      'Plot and house cannot be empty'),
                                   actions: [
                                     TextButton(
                                         onPressed: () {
@@ -227,6 +248,7 @@ class _HomePageState extends State<HomePage> {
                           _plotNameController.text = '';
                           _houseNameController.text = '';
                           _tenantNameController.text = '';
+                          _phoneController.text = '';
 
                           // Close the bottom sheet
                           // ignore: use_build_context_synchronously
@@ -245,6 +267,7 @@ class _HomePageState extends State<HomePage> {
       _houseNameController.text = '';
       _tenantNameController.text = '';
       _plotNameController.text = '';
+      _phoneController.text = '';
     });
   }
 
@@ -254,6 +277,7 @@ class _HomePageState extends State<HomePage> {
       _plotNameController.text,
       _houseNameController.text,
       _tenantNameController.text,
+      _phoneController.text,
       // _selectedMonths.toList(),
     );
     _refreshJournals();
@@ -266,6 +290,7 @@ class _HomePageState extends State<HomePage> {
       _plotNameController.text,
       _houseNameController.text,
       _tenantNameController.text,
+      _phoneController.text,
       // _selectedMonths.toList(),
     );
     _refreshJournals();
@@ -281,7 +306,7 @@ class _HomePageState extends State<HomePage> {
     _refreshJournals();
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text("You deleted '$houseName' from '$plotName'"),
+      content: Text("You have deleted '$houseName' from '$plotName'"),
       duration: const Duration(seconds: 5),
     ));
   }
@@ -335,50 +360,52 @@ class _HomePageState extends State<HomePage> {
                     shape: BeveledRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     tileColor: const Color.fromRGBO(255, 255, 255, 0.102),
-                    title: Row(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Text(_journals[index]['plotName'],
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 20)),
+                        Text(_journals[index]['houseName'],
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16)),
+                        Row(
                           children: [
-                            Text(_journals[index]['plotName'],
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 20)),
-                            Text(_journals[index]['houseName'],
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 16)),
                             Text(_journals[index]['tenantName'],
                                 style: const TextStyle(
                                     fontStyle: FontStyle.italic,
                                     color: Colors.white,
                                     fontSize: 14)),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(_journals[index]['phone'],
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 14)),
                           ],
                         ),
-                        /*const SizedBox(
-                          width: 20,
-                        ),
-                        Text(_journals[index]['tenantName'],
-                            style: const TextStyle(
-                                fontStyle: FontStyle.italic,
-                                color: Colors.white,
-                                fontSize: 14)),*/
                       ],
                     ),
                     trailing: SizedBox(
                       width: 150,
                       child: Row(
+                        spacing: 0.1,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           IconButton(
+                            iconSize: 22,
                             color: Colors.grey[800],
                             icon: const Icon(Icons.call),
                             onPressed: null,
                           ),
                           IconButton(
+                            iconSize: 22,
                             color: Colors.grey[800],
                             icon: const Icon(Icons.mode_edit_sharp),
                             onPressed: () => _showForm(_journals[index]['id']),
                           ),
                           IconButton(
+                            iconSize: 22,
                             color: Colors.red[150],
                             icon: const Icon(Icons.delete),
                             onPressed: () => showDialog(
@@ -442,11 +469,12 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               FloatingActionButton(
+                tooltip: 'Add new',
                 elevation: 0,
                 mini: true,
                 backgroundColor: Colors.blueGrey,
                 child:
-                    const Icon(Icons.add_circle, size: 50, color: Colors.white),
+                    const Icon(Icons.add_circle, size: 40, color: Colors.white),
                 onPressed: () => _showForm(null),
               ),
             ],

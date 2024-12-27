@@ -74,6 +74,9 @@ class _SearchScreenState extends State<SearchScreen> {
                             journal['plotName']
                                 .toLowerCase()
                                 .contains(value.toLowerCase()) ||
+			    journal['houseName']
+                                .toLowerCase()
+                                .contains(value.toLowerCase()) ||	
                             journal['tenantName']
                                 .toLowerCase()
                                 .contains(value.toLowerCase()))

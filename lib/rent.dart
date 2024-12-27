@@ -112,7 +112,7 @@ class _ManagePlotsAndHousesScreenState
                           "D"
                         ][monthIndex],
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

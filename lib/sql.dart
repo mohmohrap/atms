@@ -9,7 +9,7 @@ class SQLHelper {
         plotName TEXT,
         houseName TEXT,
         tenantName TEXT,
-        
+        phone TEXT,
         createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
         
       )
@@ -36,6 +36,7 @@ class SQLHelper {
     String plotName,
     String? houseName,
     String tenantName,
+    String? phone,
     /*int? phone*/ /*, List<int> selectedMonths*/
   ) async {
     final db = await SQLHelper.db();
@@ -44,6 +45,7 @@ class SQLHelper {
       'plotName': plotName,
       'houseName': houseName,
       'tenantName': tenantName,
+      'phone': phone,
       //'phone': phone,
       /*'selectedMonths':
           selectedMonths.isNotEmpty ? selectedMonths.join(',') : '',*/
@@ -86,6 +88,7 @@ class SQLHelper {
     String plotName,
     String? houseName,
     String tenantName,
+    String? phone,
     /*int? phone*/ /*, List<int> selectedMonths*/
   ) async {
     final db = await SQLHelper.db();
@@ -94,6 +97,7 @@ class SQLHelper {
       'plotName': plotName,
       'houseName': houseName,
       'tenantName': tenantName,
+      'phone': phone,
       //'phone': phone,
       /*'selectedMonths':
           selectedMonths.isNotEmpty ? selectedMonths.join(',') : '',*/
