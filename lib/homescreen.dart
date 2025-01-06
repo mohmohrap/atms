@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:atms/search.dart';
 import 'package:atms/sql.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'rent.dart';
 
 void main() {
@@ -394,9 +395,14 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           IconButton(
                             iconSize: 22,
-                            color: Colors.grey[800],
+                            color: Colors.lightGreenAccent,
                             icon: const Icon(Icons.call),
-                            onPressed: null,
+                            onPressed: _journals[index]['phone'].isEmpty
+                                ? null
+                                : () {
+                                    final no = _journals[index]['phone'];
+                                    launchUrl(Uri.parse('tel: $no'));
+                                  },
                           ),
                           IconButton(
                             iconSize: 22,
