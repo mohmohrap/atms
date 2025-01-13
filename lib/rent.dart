@@ -52,9 +52,9 @@ class _ManagePlotsAndHousesScreenState
     /*final selectedMonths =
         Set<int>.from(_journals[index]['selectedMonths'] ?? []);*/
 
-    showDialog(
+    showGeneralDialog(
       context: context,
-      builder: (BuildContext context) {
+      pageBuilder: (context, animation1, animation2) {
         return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
             title: const Text("Select Months"),
@@ -131,6 +131,13 @@ class _ManagePlotsAndHousesScreenState
             ],
           );
         });
+      },
+      transitionDuration: Duration(milliseconds: 300),
+      transitionBuilder: (context, animation1, animation2, child) {
+        return FadeTransition(
+          opacity: animation1,
+          child: child,
+        );
       },
     );
   }

@@ -1,3 +1,4 @@
+import 'package:atms/faded_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:atms/search.dart';
 import 'package:atms/sql.dart';
@@ -328,10 +329,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(right: 24),
               child: IconButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SearchScreen()));
+                    navigateToWithFade(context, const SearchScreen());
                   },
                   icon: const Icon(
                     Icons.search,
@@ -414,10 +412,9 @@ class _HomePageState extends State<HomePage> {
                             iconSize: 22,
                             color: Colors.red[150],
                             icon: const Icon(Icons.delete),
-                            onPressed: () => showDialog(
-                              useSafeArea: true,
+                            onPressed: () => showGeneralDialog(
                               context: context,
-                              builder: (BuildContext context) {
+                              pageBuilder: (context, animation1, animation2) {
                                 return AlertDialog(
                                   shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
@@ -445,6 +442,14 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 );
                               },
+                              transitionDuration: Duration(milliseconds: 300),
+                              transitionBuilder:
+                                  (context, animation1, animation2, child) {
+                                return FadeTransition(
+                                  opacity: animation1,
+                                  child: child,
+                                );
+                              },
                             ),
                           ),
                         ],
@@ -460,11 +465,8 @@ class _HomePageState extends State<HomePage> {
             children: [
               ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              const ManagePlotsAndHousesScreen()));
+                  navigateToWithFade(
+                      context, const ManagePlotsAndHousesScreen());
                 },
                 label: const Text(
                   "Manage Payment",
