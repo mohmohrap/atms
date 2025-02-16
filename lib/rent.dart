@@ -53,10 +53,12 @@ class _ManagePlotsAndHousesScreenState
         Set<int>.from(_journals[index]['selectedMonths'] ?? []);*/
 
     showGeneralDialog(
+      barrierDismissible: true,
       context: context,
       pageBuilder: (context, animation1, animation2) {
         return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
+            backgroundColor: Colors.blueGrey[300],
             title: const Text("Select Months"),
             content: SizedBox(
               width: double.maxFinite,

@@ -29,6 +29,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   List<Map<String, dynamic>> _journals = []; // List to store search results
   bool _isLoading = false; // Flag to indicate if data is being loaded
+  final FocusNode _focusNode = FocusNode();
 
   List<Map<String, dynamic>> _searchResults =
       []; // List to store filtered search results
@@ -36,6 +37,9 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
     _refreshJournals(); // Call _refreshJournals to fetch data from the database
   }
 
@@ -66,6 +70,7 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               const SizedBox(height: 5),
               TextField(
+                focusNode: _focusNode,
                 style: const TextStyle(color: Colors.white),
                 onChanged: (value) {
                   setState(() {
@@ -74,9 +79,9 @@ class _SearchScreenState extends State<SearchScreen> {
                             journal['plotName']
                                 .toLowerCase()
                                 .contains(value.toLowerCase()) ||
-			    journal['houseName']
+                            journal['houseName']
                                 .toLowerCase()
-                                .contains(value.toLowerCase()) ||	
+                                .contains(value.toLowerCase()) ||
                             journal['tenantName']
                                 .toLowerCase()
                                 .contains(value.toLowerCase()))
@@ -84,8 +89,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   });
                 },
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(
+                  filled: true,
+                  fillColor: Colors.blueGrey,
+                  focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
+                        color: Colors.blueGrey,
                         style: BorderStyle.solid,
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(15))),

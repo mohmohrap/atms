@@ -69,7 +69,7 @@ class InitialPage extends StatelessWidget {
                       );
                     }
 
-                    Navigator.pushNamed(context, '/home');
+                    //Navigator.pushNamed(context, '/home');
                   },
                 ),
               ),
